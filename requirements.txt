@@ -1,3 +1,2 @@
-nose
-sphinx
-pillow
+django-jsonfield==0.8.12
+imagekit==2.0.2

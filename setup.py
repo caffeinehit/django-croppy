@@ -2,6 +2,7 @@
 
 from setuptools import setup, find_packages
 
+import croppy
 
 with open('README.rst') as f:
     readme = f.read()
@@ -14,7 +15,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='django-croppy',
-    version='0.0.1',
+    version=croppy.__version__,
     description='Image library for creating user-croppable media',
     long_description=readme,
     author='Alen Mujezinovic',

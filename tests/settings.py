@@ -9,7 +9,9 @@ ADMINS = (
 
 MEDIA_ROOT = os.path.join(
     os.path.dirname(__file__),
-    'MEDIA')
+    'test-media')
+
+MEDIA_URL = '/test-media/'
 
 DATABASES = {
     'default': {
