@@ -1,9 +1,14 @@
 language: python
+env:
+  - DJANGO=1.3.5
+  - DJANGO=1.4.3
 python:
   - "2.6"
   - "2.7"
 # command to install dependencies
 install:
-    - pip install django pillow
+    - pip install -q django==$DJANGO --use-mirrors
+    - pip install -q pillow --use-mirrors
+    - pip install -q -r requirements.txt --use-mirrors
     - python setup.py develop
 script: tests/test.sh

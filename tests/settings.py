@@ -7,6 +7,8 @@ ADMINS = (
     ('Tester', 'test@example.com'),
 )    
 
+SECRET_KEY = 'secret'
+
 MEDIA_ROOT = os.path.join(
     os.path.dirname(__file__),
     'test-media')
