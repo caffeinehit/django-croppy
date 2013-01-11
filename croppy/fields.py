@@ -218,13 +218,14 @@ class CropField(TextField):
         """
         self.image_field = image_field
 
-        self.json_field = jsonfield.JSONField(*args, **kwargs)
-        kwargs['default'] = self.json_field.default
-                                                           
         # Storage is required to make ImageFieldFile work
         self.storage = kwargs.pop('storage', DefaultStorage())
         self.upload_to = kwargs.pop('upload_to', upload_to)
+        kwargs['editable'] = kwargs.get('editable', False)
         
+        self.json_field = jsonfield.JSONField(*args, **kwargs)
+        kwargs['default'] = self.json_field.default
+                                                           
         super(CropField, self).__init__(*args, **kwargs)
 
     def contribute_to_class(self, cls, name):
