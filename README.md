@@ -1,4 +1,4 @@
-# django-croppy
+# django-croppy ![](https://api.travis-ci.org/caffeinehit/django-croppy.png)
 
 
 
