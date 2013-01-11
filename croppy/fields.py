@@ -120,9 +120,8 @@ class CropFieldDescriptor(object):
            
         if hasattr(self, name) and not isinstance(getattr(self, name), CropFieldFile):
             raise ValidationError(
-                "Cannot override existing attribute '{}' with crop file.".format(
-                    name))
-    
+                "Cannot override existing attribute '%s' with crop file." % name
+            )       
     def get_filename(self, name):
         """
         Delegate filename creation to :attr:`field.upload_to`. 

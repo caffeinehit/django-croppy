@@ -90,9 +90,15 @@ class CropsFieldTest(TestCase):
     def test_method_interference(self):
         """ Make sure that we can't use names for crops of methods already 
         present on the ``CropsDescriptor``. """
-        self.assertRaises(ValidationError, lambda: self.image.crops.create('data',
-            self.crop))
         
+        try:
+            self.assertRaises(ValidationError, lambda: self.image.crops.create('data',
+                self.crop))
+        except ValueError:
+            import pdb;pdb.set_trace()
+            self.assertRaises(ValidationError, lambda: self.image.crops.create('data',
+                self.crop))
+            
         def assign():
             self.image.crops.data = {
                 'data': {'x': 0, 'y': 0,
