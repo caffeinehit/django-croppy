@@ -1,11 +1,9 @@
-from .models import *
+from .models import Image
 from croppy.fields import CropFieldDescriptor, CropFieldFile
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files import File
-from django.db import connection
 from django.test import TestCase
-from pprint import pprint
 import os
 import shutil
 
@@ -18,8 +16,7 @@ def get_image(filename):
     image = Image()
 
     with open(path) as f:
-        image.image.save(filename, File(f), save=False)
-        image.save()
+        image.image.save(filename, File(f))
 
     return image
                    

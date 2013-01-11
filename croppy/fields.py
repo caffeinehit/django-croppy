@@ -173,7 +173,7 @@ class CropFieldDescriptor(object):
 
 class CropFieldCreator(object):
     """ 
-    Instead of using a metaclass for our custom field, we follow kind of
+    Instead of using a metaclass for our custom field, we kind of
     follow :attr:`django.db.fields.files` in how to set up custom field 
     attributes on model objects. 
     """ 

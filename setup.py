@@ -7,7 +7,7 @@ import croppy
 with open('README.rst') as f:
     readme = f.read()
 
-with open('LICENSE') as f:
+with open('LICENCE') as f:
     license = f.read()
 
 with open('requirements.txt') as f:
@@ -16,11 +16,11 @@ with open('requirements.txt') as f:
 setup(
     name='django-croppy',
     version=croppy.__version__,
-    description='Image library for creating user-croppable media',
+    description='Django model field to store custom image crops',
     long_description=readme,
     author='Alen Mujezinovic',
-    author_email='me@kennethreitz.com',
-    url='https://github.com/caffeinehit/django-ilib',
+    author_email='alen@caffeinehit.com',
+    url='https://github.com/caffeinehit/django-croppy',
     license=license,
     install_requires=install_requires,
     packages=find_packages(exclude=('tests', 'docs'))
