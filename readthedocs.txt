@@ -1,0 +1,3 @@
+django
+django-jsonfield==0.8.12
+django-imagekit==2.0.2
