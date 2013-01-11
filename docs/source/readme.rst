@@ -1,5 +1,5 @@
-django-croppy
-=============
+django-croppy |image0|
+======================
 
 ``django-croppy`` enables creating custom crops of images by specifying
 a name, coordinates, width and height of the crop.
@@ -82,3 +82,4 @@ crops.
     >>> image.crops.data
     {}
 
+.. |image0| image:: https://api.travis-ci.org/caffeinehit/django-croppy.png
