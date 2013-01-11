@@ -232,8 +232,8 @@ class CropField(TextField):
         super(CropField, self).contribute_to_class(cls, name)
         setattr(cls, name, CropFieldCreator(self))
 
-    def get_db_prep_value(self, value, connection=None, prepared=None):
-        return self.json_field.get_db_prep_value(value.data, connection, prepared)
+    def get_db_prep_value(self, value, **kwargs):
+        return self.json_field.get_db_prep_value(value.data, **kwargs)
 
     def to_python(self, value):
         return self.json_field.to_python(value)
