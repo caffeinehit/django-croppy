@@ -18,7 +18,7 @@ def upload_to(instance, image, crop_name):
         called.
     """
     filename, ext = os.path.splitext(os.path.split(image.name)[-1])
-    return os.path.join('crops', '{}-{}{}'.format(filename, crop_name, ext))
+    return os.path.join('crops', u'%s-%s%s' % (filename, crop_name, ext))
 
 class CropFieldFile(ImageFieldFile):
     """
