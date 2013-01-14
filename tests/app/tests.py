@@ -91,13 +91,8 @@ class CropsFieldTest(TestCase):
         """ Make sure that we can't use names for crops of methods already 
         present on the ``CropsDescriptor``. """
         
-        try:
-            self.assertRaises(ValidationError, lambda: self.image.crops.create('data',
-                self.crop))
-        except ValueError:
-            import pdb;pdb.set_trace()
-            self.assertRaises(ValidationError, lambda: self.image.crops.create('data',
-                self.crop))
+        self.assertRaises(ValidationError, lambda: self.image.crops.create('data',
+            self.crop))
             
         def assign():
             self.image.crops.data = {
@@ -107,6 +102,18 @@ class CropsFieldTest(TestCase):
         
         self.assertRaises(ValidationError, assign)
         
+    def test_iterator_and_length(self):
+        self.image.crops.create('square', self.crop)
+        self.image.crops.create('rect', self.crop)
+        
+        num = 0
+        for crop in self.image.crops:
+            self.assertTrue(os.path.exists(crop.path))
+            num += 1
+
+        self.assertEqual(2, num)
+        
+        self.assertEqual(2, len(self.image.crops))
 
     def tearDown(self):
         shutil.rmtree(settings.MEDIA_ROOT)

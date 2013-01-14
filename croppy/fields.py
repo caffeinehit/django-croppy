@@ -168,7 +168,13 @@ class CropFieldDescriptor(object):
                 self.instance,
                 self.field,
                 spec['filename']))
-        
+    
+    def __iter__(self):
+        for key in self.data:
+            yield getattr(self, key)
+
+    def __len__(self):
+        return len(self.data.keys())
 
 class CropFieldCreator(object):
     """ 
