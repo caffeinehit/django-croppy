@@ -206,7 +206,8 @@ class CropField(TextField):
                                             
     """
                                                
-    def __init__(self, image_field, *args, **kwargs):
+    def __init__(self, image_field=None, storage=DefaultStorage(),
+        upload_to=upload_to, editable=False, *args, **kwargs):
         """
         Custom field to generate crops of custom sizes in custom locations.
         
@@ -216,13 +217,14 @@ class CropField(TextField):
             three attributes, ``instance``, ``image`` and ``crop_name``. See
             :attr:`upload_to`.
         """
+        assert image_field is not None, "You must specify an 'image_field' parameter."
+
         self.image_field = image_field
 
-        # Storage is required to make ImageFieldFile work
-        self.storage = kwargs.pop('storage', DefaultStorage())
-        self.upload_to = kwargs.pop('upload_to', upload_to)
+        self.storage = storage
+        self.upload_to = upload_to 
 
-        kwargs['editable'] = kwargs.get('editable', False)
+        kwargs['editable'] = editable
         
         self.json_field = jsonfield.JSONField(*args, **kwargs)
 
@@ -242,4 +244,18 @@ class CropField(TextField):
 
 
 
-
+try:
+    from south.modelsinspector import add_introspection_rules
+    
+    rules = [
+        (
+            (CropField,),
+            [],  # Args
+            {  # Kwargs
+                "image_field": ["image_field", {}],
+            }  
+        ),
+    ]
+    add_introspection_rules(rules, ["^croppy\.fields\.CropField"])
+except ImportError:
+    pass
