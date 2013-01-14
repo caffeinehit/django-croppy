@@ -25,6 +25,10 @@ class CropFieldFile(ImageFieldFile):
     :attr:`CropFieldFile` objects are attached to a model's crop descriptor for each 
     specified crop spec.
     """
+    def __init__(self, crop_name, spec, *args, **kwargs):
+        self.crop_name = crop_name
+        self.spec = spec
+        super(CropFieldFile, self).__init__(*args, **kwargs)
        
     def delete(self, save=True):
         """
@@ -165,6 +169,7 @@ class CropFieldDescriptor(object):
                 continue
 
             setattr(self, name, CropFieldFile(
+                name, spec,
                 self.instance,
                 self.field,
                 spec['filename']))
