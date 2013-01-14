@@ -8,16 +8,16 @@ import jsonfield
 import os
 
 
-def upload_to(instance, image, crop_name):
+def upload_to(instance, filename, crop_name):
     """
     Default function to specify a location to save crops to.
     
     :param instance: The model instance this crop field belongs to.
-    :param image: The image instance this crop field operates on.
+    :param filename: The image's filename this crop field operates on.
     :param crop_name: The crop name used when :attr:`CropFieldDescriptor.crop` was 
         called.
     """
-    filename, ext = os.path.splitext(os.path.split(image.name)[-1])
+    filename, ext = os.path.splitext(os.path.split(filename)[-1])
     return os.path.join('crops', u'%s-%s%s' % (filename, crop_name, ext))
 
 class CropFieldFile(ImageFieldFile):
@@ -126,7 +126,7 @@ class CropFieldDescriptor(object):
         """
         Delegate filename creation to :attr:`field.upload_to`. 
         """
-        return self.field.upload_to(self.instance, self.image, name)
+        return self.field.upload_to(self.instance, self.image.name, name)
     
     @property
     def data(self):
@@ -221,9 +221,11 @@ class CropField(TextField):
         # Storage is required to make ImageFieldFile work
         self.storage = kwargs.pop('storage', DefaultStorage())
         self.upload_to = kwargs.pop('upload_to', upload_to)
+
         kwargs['editable'] = kwargs.get('editable', False)
         
         self.json_field = jsonfield.JSONField(*args, **kwargs)
+
         kwargs['default'] = self.json_field.default
                                                            
         super(CropField, self).__init__(*args, **kwargs)
