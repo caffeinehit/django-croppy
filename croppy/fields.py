@@ -87,8 +87,8 @@ class CropFieldDescriptor(object):
         :param spec: 4-tuple containing ``(x, y, width, height)``
         :param save: Boolean, if specified the model is saved back to DB after the crop.
         """
-        
         self.validate_name(name)
+
         (x, y, width, height) = spec
         spec = {name: dict(x=x, y=y, width=width, height=height)}
         
@@ -98,8 +98,11 @@ class CropFieldDescriptor(object):
 
         spec[name]['filename'] = filename
 
+        # If a crop exists already, delete it first
+        if hasattr(self, name):
+            self.delete(name, save=False)
+
         generator = SpecFileGenerator(processors, storage=self.field.storage)
-        
         generator.generate_file(filename, self.image)
 
         self.data = dict(self.data, **spec)
@@ -134,12 +137,13 @@ class CropFieldDescriptor(object):
         if hasattr(self, name) and not isinstance(getattr(self, name), CropFieldFile):
             raise ValidationError(
                 "Cannot override existing attribute '%s' with crop file." % name
-            )       
+            )      
+             
     def get_filename(self, name):
         """
         Delegate filename creation to :attr:`field.upload_to`. 
         """
-        return self.field.upload_to(self.instance, self.image.name, name)
+        return self.field.upload_to(self.instance, os.path.split(self.image.name)[-1], name)
     
     @property
     def data(self):
