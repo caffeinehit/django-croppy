@@ -25,6 +25,7 @@ class CropsFieldTest(TestCase):
         settings.DEBUG = True
         self.image = get_image('test.tiff')
         self.crop = (0, 0, 100, 100)
+        self.rect = (100, 100, 200, 100)
 
     def test_save_image(self):
         image = Image.objects.get(id=self.image.id)
@@ -44,7 +45,7 @@ class CropsFieldTest(TestCase):
         
         # Make sure it does not save with save=False
         with self.assertNumQueries(0):
-            self.image.crops.create('rect', self.crop, save=False)
+            self.image.crops.create('rect', self.rect, save=False)
 
         image = Image.objects.get(pk=self.image.pk)
 
@@ -77,7 +78,7 @@ class CropsFieldTest(TestCase):
 
     def test_create_and_load_crops(self):
         self.image.crops.create('square', self.crop)
-        self.image.crops.create('rect', self.crop)
+        self.image.crops.create('rect', self.rect)
         
         image = Image.objects.get(id=self.image.id)
         
@@ -104,7 +105,7 @@ class CropsFieldTest(TestCase):
         
     def test_iterator_and_length(self):
         self.image.crops.create('square', self.crop)
-        self.image.crops.create('rect', self.crop)
+        self.image.crops.create('rect', self.rect)
         
         num = 0
         for crop in self.image.crops:

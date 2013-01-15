@@ -3,10 +3,19 @@ from django.core.files.storage import DefaultStorage
 from django.db.models.fields import TextField
 from django.db.models.fields.files import ImageFieldFile
 from imagekit.generators import SpecFileGenerator
-from imagekit.processors.crop import Crop
 import jsonfield
 import os
 
+class Crop(object):
+    def __init__(self, x=None, y=None, width=None, height=None):
+        self.x = x
+        self.y = y
+        self.width = width 
+        self.height = height 
+    
+    def process(self, img):
+        new = img.crop((self.x, self.y, self.x + self.width, self.y + self.height))
+        return new
 
 def upload_to(instance, filename, crop_name):
     """
