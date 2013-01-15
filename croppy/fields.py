@@ -3,6 +3,7 @@ from django.core.files.storage import DefaultStorage
 from django.db.models.fields import TextField
 from django.db.models.fields.files import ImageFieldFile
 from imagekit.generators import SpecFileGenerator
+from imagekit.processors.resize import Resize
 import jsonfield
 import os
 
@@ -14,8 +15,8 @@ class Crop(object):
         self.height = height 
     
     def process(self, img):
-        new = img.crop((self.x, self.y, self.x + self.width, self.y + self.height))
-        return new
+        return img.crop((self.x, self.y, self.x + self.width, self.y + self.height))
+
 
 def upload_to(instance, filename, crop_name):
     """
@@ -74,7 +75,7 @@ class CropFieldDescriptor(object):
         self._data = {}
         self.data = data        
 
-    def create(self, name, spec, save=True):
+    def create(self, name, spec, resize=None, save=True):
         """
         Create a new crop with the provided spec. For example the following code
         creates a crop of the original image starting at the X/Y coordinates of 
@@ -82,9 +83,20 @@ class CropFieldDescriptor(object):
                                                                         
             >>> image.crops.create('thumbnail', (0, 0, 100, 150))
         
+        Also allows for resizing the crop once it's been done. Useful for scaling
+        the crop down to the desired target size::
+        
+            >>> (x, y, width, height) = crop = 0, 0, 100, 150
+            >>> scaled_w, scaled_h = scaled = width / 3 * 2, height / 3 * 2
+            >>> image.crops.create('thumbnail', crop, resize = scaled)
+        
+        Note that you should keep the ratio of width to height when resizing or 
+        you'll end up with warped images.
+                                         
         :param name: Crop name. This must be unique and is also used to generate
             the filename.
         :param spec: 4-tuple containing ``(x, y, width, height)``
+        :param resize: 2-tuple for resizing the crop containing ``(width, height)``
         :param save: Boolean, if specified the model is saved back to DB after the crop.
         """
         self.validate_name(name)
@@ -93,6 +105,9 @@ class CropFieldDescriptor(object):
         spec = {name: dict(x=x, y=y, width=width, height=height)}
         
         processors = [Crop(**spec[name])]
+        
+        if resize is not None:
+            processors.append(Resize(resize[0], resize[1]))
         
         filename = self.get_filename(name)
 

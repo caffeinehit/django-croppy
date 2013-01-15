@@ -116,5 +116,14 @@ class CropsFieldTest(TestCase):
         
         self.assertEqual(2, len(self.image.crops))
 
+    def test_resizing_crop(self):
+        self.image.crops.create('square', self.crop)
+        self.assertEqual(100, self.image.crops.square.width)
+        self.assertEqual(100, self.image.crops.square.height)
+        
+        self.image.crops.create('resized_square', self.crop, resize=(200, 200))
+        self.assertEqual(200, self.image.crops.resized_square.width)
+        self.assertEqual(200, self.image.crops.resized_square.height)
+
     def tearDown(self):
         shutil.rmtree(settings.MEDIA_ROOT)
