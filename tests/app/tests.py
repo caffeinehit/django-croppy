@@ -127,3 +127,4 @@ class CropsFieldTest(TestCase):
 
     def tearDown(self):
         shutil.rmtree(settings.MEDIA_ROOT)
+        settings.DEBUG = False

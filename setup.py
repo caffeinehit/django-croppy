@@ -23,6 +23,6 @@ setup(
     url='https://github.com/caffeinehit/django-croppy',
     license=license,
     install_requires=install_requires,
-    packages=find_packages(exclude=('tests', 'docs'))
+    packages=find_packages(exclude=('tests*', 'docs*'))
 )
 
