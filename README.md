@@ -40,9 +40,11 @@ crops.
 
 
 ```python
-$ cd tests && source test.sh && django-admin.py syncdb --settings tests.settings
+$ git clone git@github.com:caffeinehit/django-croppy.git
+$ cd django-croppy
+$ python manage.py syncdb
 ...
-$ django-admin.py shell --settings tests.settings
+$ python manage.py shell
 ...
 >>> from tests.app import tests
 >>> image = tests.get_image('test.tiff')
