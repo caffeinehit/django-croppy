@@ -12,4 +12,4 @@ install:
     - pip install -q pillow --use-mirrors
     - pip install -q -r requirements.txt --use-mirrors
     - python setup.py develop
-script: tests/test.sh
+script: test.sh
