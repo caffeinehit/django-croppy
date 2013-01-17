@@ -143,6 +143,9 @@ class CropFieldDescriptor(object):
     def clear(self, save=True):
         """ 
         Deletes all crops on this field.
+        
+        :param save: Boolean, whether to save the model instance or not after 
+            deleting the file.
         """
         for crop in self:
             self.delete(crop.crop_name, save=False)
