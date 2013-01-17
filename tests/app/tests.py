@@ -125,6 +125,18 @@ class CropsFieldTest(TestCase):
         self.assertEqual(200, self.image.crops.resized_square.width)
         self.assertEqual(200, self.image.crops.resized_square.height)
 
+    def test_clearing_all_crops(self):
+        self.image.crops.create('square', self.crop)
+        self.image.crops.create('rect', self.rect)
+
+        square = self.image.crops.square.path 
+        rect = self.image.crops.rect.path
+
+        self.image.crops.clear()
+
+        self.assertFalse(os.path.exists(square))
+        self.assertFalse(os.path.exists(rect))
+
     def tearDown(self):
         shutil.rmtree(settings.MEDIA_ROOT)
         settings.DEBUG = False

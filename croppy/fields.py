@@ -139,6 +139,17 @@ class CropFieldDescriptor(object):
         delattr(self, name)
         del self._data[name]
         crop.delete(save)
+        
+    def clear(self, save=True):
+        """ 
+        Deletes all crops on this field.
+        """
+        for crop in self:
+            self.delete(crop.crop_name, save=False)
+        
+        if save:
+            self.instance.save()
+        
     
     def validate_name(self, name):
         """ 
@@ -203,7 +214,7 @@ class CropFieldDescriptor(object):
                 spec['filename']))
     
     def __iter__(self):
-        for key in self.data:
+        for key in self.data.keys():
             yield getattr(self, key)
 
     def __len__(self):
