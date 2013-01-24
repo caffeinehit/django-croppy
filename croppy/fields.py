@@ -128,6 +128,8 @@ class CropFieldDescriptor(object):
         if save:
             self.instance.save()
 
+        return getattr(self, name)
+
         
     def delete(self, name, save=True):
         """
