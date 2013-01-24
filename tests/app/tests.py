@@ -51,7 +51,6 @@ class CropsFieldTest(TestCase):
 
         self.assertFalse('rect' in image.crops.data)
 
-
     def test_delete_crop(self):
         self.image.crops.create('square', self.crop)
         path = self.image.crops.square.path 
@@ -136,6 +135,15 @@ class CropsFieldTest(TestCase):
 
         self.assertFalse(os.path.exists(square))
         self.assertFalse(os.path.exists(rect))
+
+    def test_hyphenated_names(self):
+        self.image.crops.create('squared-crop', self.crop)
+        self.assertTrue(os.path.exists(self.image.crops.squared_crop.path))
+
+        path = self.image.crops.squared_crop.path
+
+        self.image.crops.delete('squared-crop')
+        self.assertFalse(os.path.exists(path))
 
     def tearDown(self):
         shutil.rmtree(settings.MEDIA_ROOT)

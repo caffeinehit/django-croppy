@@ -2,10 +2,13 @@ from django.core.exceptions import ValidationError
 from django.core.files.storage import DefaultStorage
 from django.db.models.fields import TextField
 from django.db.models.fields.files import ImageFieldFile
+from django.template.defaultfilters import slugify 
 from imagekit.generators import SpecFileGenerator
 from imagekit.processors.resize import Resize
 import jsonfield
 import os
+
+
 
 class Crop(object):
     def __init__(self, x=None, y=None, width=None, height=None):
@@ -99,7 +102,7 @@ class CropFieldDescriptor(object):
         :param resize: 2-tuple for resizing the crop containing ``(width, height)``
         :param save: Boolean, if specified the model is saved back to DB after the crop.
         """
-        self.validate_name(name)
+        name = self.validate_name(name)
 
         (x, y, width, height) = spec
         spec = {name: dict(x=x, y=y, width=width, height=height)}
@@ -135,6 +138,7 @@ class CropFieldDescriptor(object):
         :param save: Boolean, whether to save the model instance or not after 
             deleting the file.
         """
+        name = self.validate_name(name)
         crop = getattr(self, name)
         delattr(self, name)
         del self._data[name]
@@ -166,7 +170,8 @@ class CropFieldDescriptor(object):
         if hasattr(self, name) and not isinstance(getattr(self, name), CropFieldFile):
             raise ValidationError(
                 "Cannot override existing attribute '%s' with crop file." % name
-            )      
+            )
+        return slugify(name).replace('-', '_')
              
     def get_filename(self, name):
         """
@@ -204,9 +209,9 @@ class CropFieldDescriptor(object):
         :attr:`CropFieldFiles.url`, :attr:`CropFieldFiles.path`, etc.
         """
         for name, spec in value.iteritems():
-            self.validate_name(name)
+            name = self.validate_name(name)
             self._data[name] = spec
-            
+
             if hasattr(self, name):
                 continue
 
