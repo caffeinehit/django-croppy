@@ -28,22 +28,32 @@ location where to save crops to with the ``upload_to`` parameter:
     from django.db import models
     from croppy.fields import CropField
 
-    def upload_to(instance, image, crop_name):
-        filename, ext = os.path.splitext(os.path.split(image.name)[-1])
-        return os.path.join('crops', '{}-{}{}'.format(filename, crop_name, ext))
+    def upload_to(instance, filename, crop_name):
+        """
+        Default function to specify a location to save crops to.
+
+        :param instance: The model instance this crop field belongs to.
+        :param filename: The image's filename this crop field operates on.
+        :param crop_name: The crop name used when :attr:`CropFieldDescriptor.crop` was 
+            called.
+        """
+        filename, ext = os.path.splitext(os.path.split(filename)[-1])
+        return os.path.join('crops', u'%s-%s%s' % (filename, crop_name, ext))
 
     class Image(models.Model):
         image = models.ImageField()
-        crops = CropField(upload_to = upload_to)
+        crops = CropField('image', upload_to = upload_to)
 
 The created ``crops`` field allows you to create, delete and inspect
 crops.
 
 ::
 
-    $ cd tests && source test.sh && django-admin.py syncdb --settings tests.settings
+    $ git clone git@github.com:caffeinehit/django-croppy.git
+    $ cd django-croppy
+    $ python manage.py syncdb
     ...
-    $ django-admin.py shell --settings tests.settings
+    $ python manage.py shell
     ...
     >>> from tests.app import tests
     >>> image = tests.get_image('test.tiff')
